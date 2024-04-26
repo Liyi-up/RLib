@@ -50,7 +50,7 @@ const CascadeScroll: FC<CascadeScrollProps> & CascadeScrollStaticProps = (
   }, [children]);
 
   return (
-    <div className={ContainerClassName} style={{ width, height }}>
+    <div className={'flex'} style={{ width, height }}>
       {wrapperChildren}
     </div>
   );

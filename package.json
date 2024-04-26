@@ -4,10 +4,9 @@
   "description": "A react library developed with dumi",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-
   "scripts": {
     "start": "npm run dev",
-    "dev": "dumi dev",
+    "dev": "node scripts/run-dev.mjs",
     "build": "father build",
     "build:watch": "father dev",
     "docs:build": "dumi build",
@@ -60,16 +59,19 @@
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
     "@umijs/lint": "^4.1.10",
+    "autoprefixer": "^10.4.19",
     "dumi": "^2.2.17",
     "eslint": "^9.1.1",
     "father": "^4.4.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
+    "postcss": "^8.4.38",
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
     "prettier-plugin-packagejson": "^2.5.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "stylelint": "^16.4.0"
+    "stylelint": "^16.4.0",
+    "tailwindcss": "^3.4.3"
   }
 }

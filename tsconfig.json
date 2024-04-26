@@ -16,5 +16,5 @@
     "noImplicitAny": true,
     "resolveJsonModule": true
   },
-  "include": [".dumirc.ts", "src/**/*"]
+  "include": [".dumirc.ts", "src/**/*", "docs/**/demos/*", "scripts"]
 }

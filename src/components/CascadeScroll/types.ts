@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import CascadeScroll from './CascadeScroll';
 import Item from './Item';
 import LeftPanel from './LeftPanel';
@@ -16,3 +16,5 @@ export type CascadeScrollStaticProps = {
   Item: typeof Item;
   LeftPanel: typeof LeftPanel;
 };
+
+export type CascadeScrollLeftPanel = PropsWithChildren<{}>;
