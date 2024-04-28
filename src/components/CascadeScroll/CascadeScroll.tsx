@@ -1,8 +1,16 @@
-import React, { Children, FC, isValidElement, useMemo, useState } from 'react';
+import extractChildrenFromFragment from '@codeli/react-lib/helper/extractChildrenFromFragment';
+import isFragment from '@codeli/react-lib/helper/isFragment';
+import classNames from 'classnames';
+import React, { Children, FC, isValidElement, useRef, useState } from 'react';
 import Item from './Item';
 import LeftPanel from './LeftPanel';
+import RightPanel from './RightPanel';
 import { DISPLAYNAME_MAP } from './constant';
-import { CascadeScrollProps, CascadeScrollStaticProps } from './types';
+import {
+  CascadeScrollProps,
+  CascadeScrollStaticProps,
+  ChildrenRenderContext,
+} from './types';
 
 const CascadeScroll: FC<CascadeScrollProps> & CascadeScrollStaticProps = (
   props,
@@ -11,22 +19,32 @@ const CascadeScroll: FC<CascadeScrollProps> & CascadeScrollStaticProps = (
     width = '100%',
     height = '100%',
     children,
-    ContainerClassName,
+    className,
     defaultActiveKey,
   } = props;
   const [activeKey, setActiveKey] = useState(defaultActiveKey);
-  const ctx = {
+  const [isRightScroll, setRightScroll] = useState(false);
+  const isMenuClick = useRef(false);
+
+  const context: ChildrenRenderContext = {
     activeKey,
+    setActiveKey,
+    setRightScroll,
+    isMenuClick,
+    isRightScroll,
   };
 
-  const wrapperChildren = useMemo(() => {
+  const render = () => {
     if (!children || typeof children !== 'function') {
       return null;
     }
-
     let canRender = true;
+    let childrens = children(context) as unknown as React.ReactNode;
+    if (isFragment(childrens)) {
+      childrens = extractChildrenFromFragment(childrens);
+    }
 
-    Children.forEach(children(ctx), (child) => {
+    Children.forEach(childrens, (child) => {
       if (!isValidElement(child)) {
         canRender = false;
         return;
@@ -34,24 +52,26 @@ const CascadeScroll: FC<CascadeScrollProps> & CascadeScrollStaticProps = (
 
       if (
         (child.type as any).displayName !==
-        DISPLAYNAME_MAP.CASCADE_SCROLL_LEFT_PANEL
+          DISPLAYNAME_MAP.CASCADE_SCROLL_LEFT_PANEL &&
+        (child.type as any).displayName !==
+          DISPLAYNAME_MAP.CASCADE_SCROLL_RIGHT_PANEL
       ) {
         canRender = false;
         return;
       }
     });
     return canRender ? (
-      children({ activeKey })
+      childrens
     ) : (
       <span style={{ color: 'red' }}>
         Passing a CascadeScroll must be a CascadeScrollLeftPanel
       </span>
     );
-  }, [children]);
+  };
 
   return (
-    <div className={'flex'} style={{ width, height }}>
-      {wrapperChildren}
+    <div className={classNames(className, 'flex')} style={{ width, height }}>
+      {render()}
     </div>
   );
 };
@@ -59,6 +79,7 @@ const CascadeScroll: FC<CascadeScrollProps> & CascadeScrollStaticProps = (
 CascadeScroll.Wrapper = CascadeScroll;
 CascadeScroll.Item = Item;
 CascadeScroll.LeftPanel = LeftPanel;
+CascadeScroll.RightPanel = RightPanel;
 CascadeScroll.displayName = DISPLAYNAME_MAP.CASCADE_SCROLL;
 
 export default CascadeScroll;
