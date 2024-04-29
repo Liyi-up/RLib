@@ -106,7 +106,6 @@ const RightPanel: FC<CascadeScrollRightPanel> = (props) => {
             nextItemTop,
           );
         const key = child['dataset'].id as string;
-        console.log('realTop', culTop, realTop, key);
         if (isSelectKeyShouldChangeWithScroll) {
           if (key) {
             if (activeKey !== key) {

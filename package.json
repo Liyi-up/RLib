@@ -1,10 +1,10 @@
 {
-  "name": "@codeli/react-lib",
-  "version": "0.0.1",
+  "name": "react-lib-ly",
+  "version": "0.0.2",
   "description": "A react library developed with dumi",
   "module": "./es/index.js",
   "main": "./es/index.js",
-  "unpkg":"./umd/RLib.js",
+  "unpkg":"./umd/react-lib-ly.js",
   "typings": "./es/index.d.ts",
   "types": "./es/index.d.ts",
   "private":false,
@@ -20,7 +20,7 @@
     "lint:css": "stylelint \"{src,test}/**/*.{css,less}\"",
     "lint:es": "eslint \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
     "prepublishOnly": "father doctor && npm run build",
-    "publish": "npm publish ./lib --access public"
+    "publish": "npm run build && npm publish ./lib -access public"
   },
   "authors": [
     "liyi_it@126.com"

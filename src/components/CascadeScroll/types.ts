@@ -47,8 +47,8 @@ export interface CascadeScrollItem extends BaseProps {
   label?: string;
   children?: ReactNode | undefined;
   onClick?: () => void;
-  activeKey?: string;
   highlightCondition?: boolean;
+  highlightColor?: string;
 }
 
 export type EasingFunction = (t: number) => number;

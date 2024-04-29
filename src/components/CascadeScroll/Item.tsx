@@ -1,7 +1,10 @@
 import classNames from 'classnames';
 import React, { FC } from 'react';
-import { DISPLAYNAME_MAP } from './constant';
+import { ROOT_CLASS_NAME_PREFIX } from '../../constant';
+import { COMPONENT_CLASS_PREFIX, DISPLAYNAME_MAP } from './constant';
 import { CascadeScrollItem } from './types';
+
+const classPrefix = `${ROOT_CLASS_NAME_PREFIX}-${COMPONENT_CLASS_PREFIX}`;
 
 const Item: FC<CascadeScrollItem> = (props) => {
   const {
@@ -12,7 +15,6 @@ const Item: FC<CascadeScrollItem> = (props) => {
     width,
     height,
     label,
-    activeKey,
     value,
     highlightCondition = false,
   } = props;
@@ -23,7 +25,9 @@ const Item: FC<CascadeScrollItem> = (props) => {
       id={value}
       onClick={onClick}
       style={{ ...style, width, height }}
-      className={classNames(className, { 'text-cyan-600': highlightCondition })}
+      className={classNames(className, {
+        [`${classPrefix}-selected`]: highlightCondition,
+      })}
     >
       {label ? label : children}
     </div>

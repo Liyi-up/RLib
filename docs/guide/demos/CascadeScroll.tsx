@@ -1,5 +1,5 @@
-import { CascadeScroll } from '@codeli/react-lib';
 import React from 'react';
+import { CascadeScroll } from 'react-lib-ly';
 import './CascadeScroll.less';
 
 const { LeftPanel, Item, RightPanel } = CascadeScroll;

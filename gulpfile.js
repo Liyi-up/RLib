@@ -40,6 +40,22 @@ function buildES() {
     .pipe(gulp.dest('lib/es/'));
 }
 
+function buildLessStyle() {
+  return gulp
+    .src(['./src/**/*.less'], {
+      base: './src/',
+      ignore: ['**/demos/**/*', '**/tests/**/*'],
+    })
+    .pipe(
+      less({
+        paths: [path.join(__dirname, 'src')],
+        relativeUrls: true,
+      }),
+    )
+    .pipe(gulp.dest('./lib/es'))
+    .pipe(gulp.dest('./lib/cjs'));
+}
+
 function copyCSS() {
   const plugins = [
     autoprefixer(), // 使用autoprefixer自动添加CSS前缀
@@ -97,10 +113,10 @@ function umdWebpack() {
       webpackStream(
         {
           output: {
-            filename: 'RLib.js',
+            filename: 'react-lib-ly.js',
             library: {
               type: 'umd',
-              name: 'RLib',
+              name: 'react-lib-ly',
             },
           },
           mode: 'production',
@@ -153,7 +169,7 @@ exports.umdWebpack = umdWebpack;
 exports.default = gulp.series(
   clean,
   buildES,
-  gulp.parallel(buildCJS, buildDeclaration, copyCSS),
+  gulp.parallel(buildCJS, buildDeclaration, buildLessStyle, copyCSS),
   compressJs,
   generatePackageJSON,
   gulp.parallel(umdWebpack),

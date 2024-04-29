@@ -1,8 +1,8 @@
 ---
-title: RLib - A react web component library
+title: react-lib-ly - A react web component library
 order: 10
 hero:
-  title: RLib
+  title: react-lib-ly
   desc: 📖 A react web component library
   actions:
     - text: 快速上手
