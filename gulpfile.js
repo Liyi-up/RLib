@@ -110,7 +110,8 @@ function umdWebpack() {
           plugins: [
             new BundleAnalyzerPlugin({
               analyzerMode: 'static',
-              openAnalyzer: true, // 自动打开分析报告HTML
+              // openAnalyzer: true, // 自动打开分析报告HTML
+              openAnalyzer: false,
             }),
           ],
           resolve: {

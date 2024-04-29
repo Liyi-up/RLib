@@ -7,3 +7,4 @@ node_modules
 /docs-dist
 pnpm-lock.yaml
 /lib
+report.html
