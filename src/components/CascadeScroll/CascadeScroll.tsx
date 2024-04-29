@@ -1,7 +1,7 @@
-import extractChildrenFromFragment from '@codeli/react-lib/helper/extractChildrenFromFragment';
-import isFragment from '@codeli/react-lib/helper/isFragment';
 import classNames from 'classnames';
 import React, { Children, FC, isValidElement, useRef, useState } from 'react';
+import extractChildrenFromFragment from '../../helper/extractChildrenFromFragment';
+import isFragment from '../../helper/isFragment';
 import Item from './Item';
 import LeftPanel from './LeftPanel';
 import RightPanel from './RightPanel';

@@ -1,7 +1,5 @@
 const gulp = require('gulp');
-const less = require('gulp-less');
-const path = require('path');
-const postcss = require('gulp-postcss'); // 引入gulp-postcss
+const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const babel = require('gulp-babel');
@@ -12,48 +10,13 @@ const through = require('through2');
 const tsconfig = require('./tsconfig.json');
 const shell = require('gulp-shell');
 const gulpIf = require('gulp-if');
+const uglify = require('gulp-uglify');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const isTypeScriptSource = (file) =>
   /\.tsx?$/.test(file.path) && !file.path.endsWith('.d.ts');
 
 const clean = shell.task(['rm -rf ./lib/**']);
-
-// /**
-//  * 自动删除上一次打包生成的资源文件（确保每次打包的都是最新的资源）
-//  * @returns
-//  */
-// function clean() {
-//   return del('./lib/**');
-// }
-
-function buildStyle() {
-  const plugins = [
-    autoprefixer(), // 使用autoprefixer自动添加CSS前缀
-    cssnano(), // 使用cssnano进行CSS压缩
-  ];
-  return gulp
-    .src(['./src/**/*.less'], {
-      base: './src/',
-      ignore: ['**/demos/**/*', '**/tests/**/*'],
-    })
-    .pipe(
-      less({
-        paths: [path.join(__dirname, 'src')],
-        relativeUrls: true,
-      }),
-    )
-    .pipe(postcss(plugins))
-    .pipe(gulp.dest('./lib/es'))
-    .pipe(gulp.dest('./lib/cjs'));
-}
-
-function copyAssets() {
-  return gulp
-    .src('./src/assets/**/*')
-    .pipe(gulp.dest('lib/assets'))
-    .pipe(gulp.dest('lib/es/assets'))
-    .pipe(gulp.dest('lib/cjs/assets'));
-}
 
 function buildCJS() {
   return gulp
@@ -73,8 +36,20 @@ function buildES() {
       ignore: ['**/demos/**/*', '**/tests/**/*'],
     })
     .pipe(tsProject)
-    .pipe(gulpIf(isTypeScriptSource, babel())) // 仅对 TypeScript 源文件应用 Babel
+    .pipe(gulpIf(isTypeScriptSource, babel()))
     .pipe(gulp.dest('lib/es/'));
+}
+
+function copyCSS() {
+  const plugins = [
+    autoprefixer(), // 使用autoprefixer自动添加CSS前缀
+    cssnano(), // 使用cssnano进行CSS压缩
+  ];
+  return gulp
+    .src('./src/**/output.css')
+    .pipe(postcss(plugins))
+    .pipe(gulp.dest('./lib/es'))
+    .pipe(gulp.dest('./lib/cjs'));
 }
 
 function buildDeclaration() {
@@ -132,6 +107,12 @@ function umdWebpack() {
           optimization: {
             usedExports: true,
           },
+          plugins: [
+            new BundleAnalyzerPlugin({
+              analyzerMode: 'static',
+              openAnalyzer: true, // 自动打开分析报告HTML
+            }),
+          ],
           resolve: {
             extensions: ['.js', '.json'],
           },
@@ -159,14 +140,20 @@ function umdWebpack() {
     .pipe(gulp.dest('lib/umd/'));
 }
 
+function compressJs() {
+  return gulp
+    .src(['lib/es/**/*.js', 'lib/cjs/**/*.js'], { base: './' })
+    .pipe(uglify())
+    .pipe(gulp.dest('./'));
+}
+
 exports.umdWebpack = umdWebpack;
 
 exports.default = gulp.series(
   clean,
   buildES,
-  gulp.parallel(buildCJS, buildDeclaration, buildStyle),
-  // copyAssets,
-  // copyMetaFiles,
+  gulp.parallel(buildCJS, buildDeclaration, copyCSS),
+  compressJs,
   generatePackageJSON,
   gulp.parallel(umdWebpack),
 );

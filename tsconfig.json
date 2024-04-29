@@ -5,6 +5,9 @@
     "esModuleInterop": true,
     "jsx": "react",
     "baseUrl": "./",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2015", "DOM"],
     "paths": {
       "@@/*": [".dumi/tmp/*"],
       "@codeli/react-lib": ["src"],
